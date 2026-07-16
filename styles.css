@@ -715,8 +715,97 @@ a { color: var(--navy); text-decoration: none; }
 }
 
 .modal-sub {
-  margin-bottom: 26px;
+  margin-bottom: 22px;
   font-size: 0.97rem;
+  transition: opacity 0.15s ease;
+}
+
+.modal-sub.fading { opacity: 0; }
+
+/* ---------- Business / Personal tabs ---------- */
+
+.contact-tabs {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-btn);
+  margin-bottom: 22px;
+}
+
+.contact-tabs-indicator {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc(50% - 6px);
+  height: calc(100% - 8px);
+  background: var(--navy);
+  border-radius: 3px;
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.contact-tabs[data-active="personal"] .contact-tabs-indicator {
+  transform: translateX(calc(100% + 4px));
+}
+
+.contact-tab {
+  position: relative;
+  z-index: 1;
+  min-height: 44px;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  border-radius: 3px;
+  font-family: inherit;
+  font-size: 0.94rem;
+  font-weight: 600;
+  color: var(--gray);
+  cursor: pointer;
+  transition: color 0.16s ease, background 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.contact-tab:hover:not(.is-active) {
+  color: var(--navy);
+  background: rgba(8, 53, 125, 0.05);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(8, 53, 125, 0.08);
+}
+
+.contact-tab:active { transform: scale(0.98); }
+
+.contact-tab.is-active {
+  color: var(--white);
+  font-weight: 700;
+}
+
+.contact-tab:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 1px var(--navy), 0 0 0 3px rgba(8, 53, 125, 0.12);
+}
+
+.contact-tab.is-active:focus-visible {
+  box-shadow: 0 0 0 2px var(--white), 0 0 0 4px rgba(8, 53, 125, 0.4);
+}
+
+/* ---------- Tab panels ---------- */
+
+.contact-panel {
+  animation: panelIn 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.contact-panel.leaving {
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: opacity 0.15s ease, transform 0.15s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ---------- Form ---------- */
@@ -801,6 +890,13 @@ a { color: var(--navy); text-decoration: none; }
   margin-top: 3px;
   accent-color: var(--navy);
   cursor: pointer;
+}
+
+.checkbox-helper {
+  color: var(--gray-light);
+  font-size: 0.84rem;
+  font-weight: 400;
+  margin: -2px 0 10px;
 }
 
 .checkbox-error {
@@ -919,6 +1015,13 @@ a { color: var(--navy); text-decoration: none; }
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; transition: none; }
   .modal { animation: none; }
+  .contact-tabs-indicator { transition: none; }
+  .contact-tab { transition: none; }
+  .contact-tab:hover:not(.is-active) { transform: none; box-shadow: none; }
+  .contact-tab:active { transform: none; }
+  .contact-panel { animation: none; }
+  .contact-panel.leaving { transition: none; }
+  .modal-sub { transition: none; }
 }
 
 body.modal-open { overflow: hidden; }
