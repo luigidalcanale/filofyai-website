@@ -3,20 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FilofyAI — AI Automation for Businesses &amp; Individuals</title>
-  <meta name="description" content="FilofyAI turns your everyday bottlenecks into done-for-you AI workflows that actually ship and make money — for businesses and individuals alike.">
+  <title>FilofyAI — AI That Gets You Hired, and Gets Your Business Moving</title>
+  <meta name="description" content="FilofyAI builds the AI systems that help you stand out in recruiting — a personal site, outreach on autopilot, a network that never forgets, and interview prep that lands. Plus done-for-you automation for small teams.">
+  <meta name="theme-color" content="#08357D">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="FilofyAI — AI That Gets You Hired, and Gets Your Business Moving">
+  <meta property="og:description" content="10+ clients helped land first jobs, turn applications into first-round interviews, and reach their recruiting goals. Done-for-you AI systems for your career and your business.">
+  <meta property="og:url" content="https://filofyai.com/">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%2308357D'/><text x='50' y='68' font-size='55' font-weight='bold' font-family='sans-serif' fill='white' text-anchor='middle'>F</text></svg>">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
+  <a href="#main" class="skip-link">Skip to content</a>
+
   <!-- ================= NAV ================= -->
-  <nav class="nav">
+  <nav class="nav nav-collapsible" id="site-nav">
     <div class="container nav-inner">
       <a href="index.html" class="logo">FilofyAI</a>
-      <div class="nav-links">
-        <a href="#who-we-help" class="nav-link">Who We Help</a>
-        <a href="#process" class="nav-link">How We Work</a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Open navigation menu">
+        <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <div class="nav-links" id="nav-menu">
+        <a href="#how-i-help" class="nav-link">How I Help</a>
+        <a href="#business" class="nav-link">For Business</a>
+        <a href="#process" class="nav-link">Process</a>
         <a href="#testimonials" class="nav-link">Testimonials</a>
         <a href="#founder" class="nav-link">About</a>
         <button class="btn" data-open-contact>Get in Touch</button>
@@ -24,14 +36,30 @@
     </div>
   </nav>
 
+  <main id="main">
+
   <!-- ================= HERO ================= -->
-  <header class="hero">
+  <header class="hero" id="hero">
+    <!-- interactive dot field; script.js swaps the CSS dot pattern for this canvas -->
+    <canvas class="hero-dots" data-dot-field aria-hidden="true"></canvas>
     <div class="container">
-      <span class="eyebrow">AI Automation</span>
+      <span class="eyebrow">AI Automation &amp; Career Systems</span>
       <h1>Get more done.<br>Without doing more.</h1>
-      <p class="hero-sub">We turn your everyday bottlenecks into done-for-you AI workflows that actually ship and move things forward, without you becoming a tech expert.</p>
+      <p class="hero-sub">Whether you&rsquo;re trying to land the job or scale the business, I build the AI systems that carry the weight — the outreach, the follow-up, the prep, the busywork — so the work actually gets done without you becoming a tech expert.</p>
       <p class="hero-founder"><span class="founder-label">Founded by</span> <span class="founder-name">Luigi Dalcanale</span></p>
       <button class="btn" data-open-contact>Get in Touch <span class="arrow">→</span></button>
+
+      <div class="hero-proof">
+        <div class="proof-lead">
+          <span class="proof-number">10+</span>
+          <span class="proof-number-label">clients helped<br>and counting</span>
+        </div>
+        <ul class="proof-list">
+          <li>Helped clients land their first jobs</li>
+          <li>Helped clients turn applications into first-round interviews</li>
+          <li>Helped clients reach their recruiting goals and land offers</li>
+        </ul>
+      </div>
     </div>
   </header>
 
@@ -80,83 +108,143 @@
     </div>
   </section>
 
-  <!-- ================= WHO WE HELP ================= -->
-  <section class="section" id="who-we-help">
+  <!-- ================= HOW I HELP (personal / recruiting) ================= -->
+  <section class="section" id="how-i-help">
     <div class="container">
       <div class="section-header-center reveal">
-        <span class="eyebrow">Who We Help</span>
-        <h2 class="section-heading">For Your Business. And for You.</h2>
-        <p class="section-sub">AI automation isn’t just for companies. Whether you’re running a team or running your own life, we build systems that give you your time back.</p>
+        <span class="eyebrow">For You</span>
+        <h2 class="section-heading">How I Help You Stand Out</h2>
+        <p class="section-sub">Recruiting rewards the people who show up prepared, visible, and impossible to forget. These are the systems that get you there — built for you, not handed to you as homework.</p>
       </div>
-      <div class="audience-grid">
-        <div class="audience-card reveal">
-          <div class="audience-icon" aria-hidden="true">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-4h6v4"/><path d="M9 11h.01M15 11h.01M9 14h.01M15 14h.01"/></svg>
+
+      <!-- data-spotlight-order drives the fade-in/out highlight cycle in script.js -->
+      <div class="help-grid" data-spotlight-group>
+        <article class="help-card reveal" data-spotlight-order="3">
+          <div class="help-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M15.5 13.9 17 22l-5-3-5 3 1.5-8.1"/></svg>
           </div>
-          <h3>For Businesses</h3>
-          <p>Done-for-you AI workflows that remove the bottlenecks slowing your team down — so you grow output without growing payroll.</p>
-          <ul>
-            <li>Automate repetitive work across your CRM, spreadsheets, and internal tools</li>
-            <li>Streamline lead generation, customer support, and reporting</li>
-            <li>Launch with clear success metrics and ongoing support</li>
-          </ul>
-        </div>
-        <div class="audience-card reveal">
-          <div class="audience-icon" aria-hidden="true">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <h3>Stand Out in Recruiting</h3>
+          <p>Recruiters only spend a few seconds looking at your resume. I help you build a strong and consistent presence across your resume, LinkedIn, and everything else recruiters might find so you actually stand out.</p>
+        </article>
+
+        <article class="help-card reveal" data-spotlight-order="1">
+          <div class="help-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M2 8h20"/><path d="M8 21h8M12 17v4"/></svg>
           </div>
-          <h3>For Individuals</h3>
-          <p>Personal AI development, one-on-one. We help you optimize how your life works — your tasks, your routines, your skills.</p>
-          <ul>
-            <li>Automate personal tasks and life admin so nothing slips through</li>
-            <li>Learn to master AI agents and build your own automations</li>
-            <li>Turn AI skills into real productivity — and real income</li>
-          </ul>
-        </div>
+          <h3>A Personal Site That Sells You</h3>
+          <p>A personal website built around your experience, projects, and what you actually bring to the table. One link that gives recruiters a better idea of who you are before you even get on the call.</p>
+        </article>
+
+        <article class="help-card reveal" data-spotlight-order="2">
+          <div class="help-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 15 22l-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+          </div>
+          <h3>Outreach on Autopilot</h3>
+          <p>Find the right people and companies to reach out to, then make the process easier with personalized outreach. Research who you&rsquo;re contacting, what they do, and why you&rsquo;re reaching out so every message actually feels personal.</p>
+        </article>
+
+        <article class="help-card reveal" data-spotlight-order="6">
+          <div class="help-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><path d="M2 13h20"/></svg>
+          </div>
+          <h3>Job Search, Made Simple</h3>
+          <p>Finding the right roles, getting your applications out, and keeping track of everything without making the process a full-time job. I help you stay organized so you can focus on the opportunities that actually make sense for you.</p>
+        </article>
+
+        <article class="help-card reveal" data-spotlight-order="4">
+          <div class="help-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
+          </div>
+          <h3>A Network That Never Forgets</h3>
+          <p>Keep track of the people you meet, what you talked about, and the things that matter to them. Instead of forgetting about a conversation six months later, you&rsquo;ll know exactly what to follow up on and how to keep the relationship going.</p>
+        </article>
+
+        <article class="help-card reveal" data-spotlight-order="5">
+          <div class="help-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/></svg>
+          </div>
+          <h3>Interview Prep That Lands</h3>
+          <p>Practice the questions you&rsquo;re actually going to get and get honest feedback on your answers. Walk into interviews knowing your stories, your numbers, and how you want to talk about your experience.</p>
+        </article>
+      </div>
+
+      <div class="process-cta reveal">
+        <p>Not sure which one you need first?</p>
+        <button class="btn" data-open-contact>Let&rsquo;s Figure It Out <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOR BUSINESS ================= -->
+  <section class="section section-alt" id="business">
+    <div class="container">
+      <div class="section-header-center reveal">
+        <span class="eyebrow">For Your Business</span>
+        <h2 class="section-heading">When It&rsquo;s the Business That Needs to Move Faster</h2>
+        <p class="section-sub">Same idea, bigger surface area. Done-for-you AI workflows that remove the bottlenecks slowing your team down — so output grows without payroll growing with it.</p>
+      </div>
+      <div class="business-grid">
+        <article class="business-card reveal">
+          <div class="help-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h8l-1 8 10-12h-8l1-8Z"/></svg>
+          </div>
+          <h3>Automate the Busywork</h3>
+          <p>The repetitive work living in your CRM, your spreadsheets, and your internal tools — handed off to systems that don&rsquo;t get tired and don&rsquo;t forget a step.</p>
+        </article>
+        <article class="business-card reveal">
+          <div class="help-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>
+          </div>
+          <h3>Grow Without Growing Payroll</h3>
+          <p>Lead generation, customer support, and reporting streamlined end to end, so a small team covers ground that used to need three more hires.</p>
+        </article>
+        <article class="business-card reveal">
+          <div class="help-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 16v-5M12 16V8M17 16v-9"/></svg>
+          </div>
+          <h3>Launch With Proof</h3>
+          <p>Every build ships with success metrics you agreed to up front, plus monitoring and support after launch — so you know what it&rsquo;s worth, not just that it&rsquo;s running.</p>
+        </article>
       </div>
     </div>
   </section>
 
   <!-- ================= PROCESS ================= -->
-  <section class="section" id="process" style="padding-top: 24px;">
+  <section class="section" id="process">
     <div class="container">
       <div class="section-header-center reveal">
         <span class="eyebrow">How We Work</span>
         <h2 class="section-heading">Our Process</h2>
-        <p class="section-sub">A methodical, low-risk approach that starts with understanding your business — not jumping straight into tools.</p>
+        <p class="section-sub">A methodical, low-risk approach that starts with understanding where you actually are — not jumping straight into tools.</p>
       </div>
       <div class="process-grid">
         <div class="process-card reveal">
           <div class="step-number">01</div>
           <h3>Discover &amp; Diagnose</h3>
           <ul>
-            <li>We learn how your business actually works</li>
-            <li>Understand goals, constraints, and what it can accomplish</li>
-            <li>Ask where manual work exists (CRMs, spreadsheets, internal tools)</li>
+            <li>We learn how your work actually gets done today</li>
+            <li>Understand goals, constraints, and what success looks like</li>
+            <li>Find where the manual work is hiding</li>
           </ul>
         </div>
         <div class="process-card reveal">
           <div class="step-number">02</div>
           <h3>Design, Build &amp; Validate</h3>
           <ul>
-            <li>Design high-impact opportunities</li>
-            <li>Prototype 2-3 workflow approaches</li>
-            <li>Build safe test approach in our environment</li>
+            <li>Design around the highest-impact opportunities first</li>
+            <li>Prototype 2–3 approaches instead of betting on one</li>
+            <li>Test safely in our environment before it touches yours</li>
           </ul>
         </div>
         <div class="process-card reveal">
           <div class="step-number">03</div>
           <h3>Launch, Monitor &amp; Optimize</h3>
           <ul>
-            <li>Launch into production with clear success metrics</li>
+            <li>Go live with clear success metrics</li>
             <li>Continuous monitoring and support</li>
-            <li>Iterate based on feedback and outcomes</li>
+            <li>Iterate based on real feedback and outcomes</li>
           </ul>
         </div>
-      </div>
-      <div class="process-cta reveal">
-        <p>Ready to see where it can help your business?</p>
-        <button class="btn" data-open-contact>Get in Touch <span class="arrow">→</span></button>
       </div>
     </div>
   </section>
@@ -167,13 +255,13 @@
       <div class="section-header-center reveal">
         <span class="eyebrow">Testimonials</span>
         <h2 class="section-heading">Why Trust FilofyAI</h2>
-        <p class="section-sub">What professionals and colleagues say about Luigi.</p>
+        <p class="section-sub">Ten-plus clients in, the feedback keeps landing on the same thing: Luigi follows through.</p>
       </div>
       <div class="testimonial-grid">
         <div class="testimonial-card reveal">
           <div class="quote-mark" aria-hidden="true">&ldquo;</div>
-          <p class="testimonial-text">Luigi’s genuine commitment to helping others succeed shows up in every interaction. He follows up, he checks in, and he actually cares whether you got the outcome you were hoping for. That’s rare.</p>
-          <div class="testimonial-name">James Van Varrick</div>
+          <p class="testimonial-text">Luigi&rsquo;s genuine commitment to helping others succeed shows up in every interaction. He follows up, he checks in, and he actually cares whether you got the outcome you were hoping for. That&rsquo;s rare.</p>
+          <div class="testimonial-name">Zachary Appel</div>
           <div class="testimonial-role">Professional Colleague</div>
         </div>
         <div class="testimonial-card reveal">
@@ -210,14 +298,29 @@
           <p class="founder-title">Founder &amp; AI Automation Architect</p>
           <div class="founder-bio">
             <p>Luigi is a full-stack AI automation creator and a student at the Kelley School of Business at Indiana University, where he studies Finance, Accounting, and Law.</p>
-            <p>After serving as a GenAI Ambassador at Indiana University, he founded FilofyAI to help businesses — and individuals — optimize for the AI-driven productivity shift.</p>
-            <p>Today, he teaches people to master AI agents, build automations, and turn those skills into real income, all while finishing his degree.</p>
+            <p>After serving as a GenAI Ambassador at Indiana University, he founded FilofyAI to help people — and the businesses they run — optimize for the AI-driven productivity shift.</p>
+            <p>He&rsquo;s since worked with more than ten clients on exactly the problem he was solving for himself: getting noticed in recruiting, getting through the first round, and getting the offer. Alongside that, he teaches people to master AI agents, build their own automations, and turn those skills into real income.</p>
           </div>
           <a href="https://www.linkedin.com/in/ludalca/" target="_blank" rel="noopener noreferrer" class="btn">Learn More About Luigi <span class="arrow">→</span></a>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- ================= CLOSING CTA + DOT GLOBE ================= -->
+  <section class="cta-globe" id="cta">
+    <canvas class="globe-canvas" data-dot-globe aria-hidden="true"></canvas>
+    <div class="container cta-globe-inner">
+      <div class="reveal">
+        <span class="eyebrow">Let&rsquo;s Build</span>
+        <h2 class="section-heading">Your unfair advantage, built around you.</h2>
+        <p class="section-sub">One conversation is enough to figure out where you&rsquo;re at and what would actually help. No long pitch or complicated process — just a straightforward conversation about what makes sense for you.</p>
+        <button class="btn btn-lg" data-open-contact>Get in Touch <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+
+  </main>
 
   <!-- ================= FOOTER ================= -->
   <footer class="footer">

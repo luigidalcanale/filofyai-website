@@ -1,7 +1,8 @@
 /* ============================================
    FilofyAI — Shared scripts
    Injects the contact modal on every page and
-   handles modal, tabs, forms, and scroll animations.
+   handles modal, tabs, forms, navigation, and
+   all motion (reveals, spotlight, dot canvases).
    ============================================ */
 
 (function () {
@@ -16,6 +17,8 @@
     business: "Tell us about your business and how we can help you scale with AI.",
     personal: "Tell us what you’re trying to accomplish and how we can help you use AI with more clarity, confidence, and impact."
   };
+
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   /* ---------- Contact modal markup (single source of truth) ---------- */
 
@@ -34,7 +37,7 @@
     "      </div>",
     '      <div class="form-error-banner" id="form-error-banner" role="alert">Something went wrong sending your message. Please try again, or email us directly.</div>',
 
-    /* ----- Business panel (existing form, unchanged fields) ----- */
+    /* ----- Business panel ----- */
     '      <div class="contact-panel" id="panel-business" role="tabpanel" aria-labelledby="tab-business">',
     '      <form id="contact-form" novalidate>',
     '        <input type="hidden" name="_subject" value="New FilofyAI inquiry">',
@@ -167,19 +170,19 @@
     '            <input type="tel" id="cf-p-phone" name="Phone Number" placeholder="(555) 123-4567" pattern="[0-9\\(\\)\\+\\s.\\-]{7,20}" title="Please enter a valid phone number">',
     "          </div>",
     '          <div class="form-group">',
-    '            <label for="cf-p-linkedin">LinkedIn or Portfolio <span class="optional">(optional)</span></label>',
-    '            <input type="url" id="cf-p-linkedin" name="LinkedIn or Portfolio" placeholder="https://linkedin.com/in/yourname">',
+    '            <label for="cf-p-linkedin">Profile or Portfolio Link <span class="optional">(optional)</span></label>',
+    '            <input type="url" id="cf-p-linkedin" name="Profile or Portfolio" placeholder="https://yoursite.com">',
     "          </div>",
     "        </div>",
     '        <div class="form-group">',
     '          <label for="cf-p-type">Which best describes you?*</label>',
     '          <select id="cf-p-type" name="Which best describes you" required>',
     '            <option value="" disabled selected>Select one</option>',
+    "            <option>Student or recent graduate</option>",
+    "            <option>Job seeker or career changer</option>",
     "            <option>Working professional</option>",
     "            <option>Freelancer or creator</option>",
     "            <option>Founder or aspiring founder</option>",
-    "            <option>Student or recent graduate</option>",
-    "            <option>Job seeker or career changer</option>",
     "            <option>Retiree or lifelong learner</option>",
     "            <option>Other</option>",
     "          </select>",
@@ -240,14 +243,14 @@
     "          <label>What are you hoping to improve with AI or automation?*</label>",
     '          <p class="checkbox-helper">Select all that apply.</p>',
     '          <div class="checkbox-grid" id="cf-p-improve">',
+    '            <label class="checkbox-item"><input type="checkbox" name="Improve" value="Standing out in recruiting"> Standing out in recruiting</label>',
+    '            <label class="checkbox-item"><input type="checkbox" name="Improve" value="A personal website or portfolio"> A personal website or portfolio</label>',
+    '            <label class="checkbox-item"><input type="checkbox" name="Improve" value="Professional outreach to firms"> Professional outreach to firms</label>',
+    '            <label class="checkbox-item"><input type="checkbox" name="Improve" value="Job search and applications"> Job search and applications</label>',
+    '            <label class="checkbox-item"><input type="checkbox" name="Improve" value="Tracking my network and conversations"> Tracking my network and conversations</label>',
+    '            <label class="checkbox-item"><input type="checkbox" name="Improve" value="Interview preparation"> Interview preparation</label>',
     '            <label class="checkbox-item"><input type="checkbox" name="Improve" value="Personal productivity and time management"> Personal productivity and time management</label>',
-    '            <label class="checkbox-item"><input type="checkbox" name="Improve" value="Career growth, job search, or interviewing"> Career growth, job search, or interviewing</label>',
     '            <label class="checkbox-item"><input type="checkbox" name="Improve" value="Learning AI tools and practical skills"> Learning AI tools and practical skills</label>',
-    '            <label class="checkbox-item"><input type="checkbox" name="Improve" value="Content creation or creative work"> Content creation or creative work</label>',
-    '            <label class="checkbox-item"><input type="checkbox" name="Improve" value="Automating repetitive tasks"> Automating repetitive tasks</label>',
-    '            <label class="checkbox-item"><input type="checkbox" name="Improve" value="Building an AI assistant or workflow"> Building an AI assistant or workflow</label>',
-    '            <label class="checkbox-item"><input type="checkbox" name="Improve" value="Research and knowledge organization"> Research and knowledge organization</label>',
-    '            <label class="checkbox-item"><input type="checkbox" name="Improve" value="Starting or developing a personal project"> Starting or developing a personal project</label>',
     '            <label class="checkbox-item"><input type="checkbox" name="Improve" value="Other or not sure yet"> Other or not sure yet</label>',
     "          </div>",
     '          <p class="checkbox-error" id="cf-p-checkbox-error" role="alert">Please select at least one option.</p>',
@@ -276,7 +279,6 @@
   var errorBanner = document.getElementById("form-error-banner");
   var modalSub = document.getElementById("contact-modal-sub");
   var tablist = overlay.querySelector(".contact-tabs");
-  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   var TYPES = ["business", "personal"];
   var tabs = {
@@ -482,23 +484,440 @@
   wireForm(document.getElementById("contact-form"));
   wireForm(document.getElementById("contact-form-personal"));
 
-  /* ---------- Scroll reveal ---------- */
+  /* ---------- Mobile navigation ---------- */
 
-  var revealEls = document.querySelectorAll(".reveal");
+  var navEl = document.getElementById("site-nav");
+  var navToggle = navEl && navEl.querySelector(".nav-toggle");
+  var navMenu = document.getElementById("nav-menu");
+
+  if (navToggle && navMenu) {
+    var setMenu = function (open) {
+      navMenu.classList.toggle("is-open", open);
+      navToggle.setAttribute("aria-expanded", open ? "true" : "false");
+      navToggle.setAttribute("aria-label", open ? "Close navigation menu" : "Open navigation menu");
+    };
+
+    navToggle.addEventListener("click", function () {
+      setMenu(navToggle.getAttribute("aria-expanded") !== "true");
+    });
+
+    // any tap inside the panel is a navigation or the contact button — close either way
+    navMenu.addEventListener("click", function (e) {
+      if (e.target.closest("a, button")) setMenu(false);
+    });
+
+    document.addEventListener("click", function (e) {
+      if (!navEl.contains(e.target)) setMenu(false);
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") setMenu(false);
+    });
+
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 860) setMenu(false);
+    });
+  }
+
+  /* ---------- Nav shadow + current-section link ---------- */
+
+  if (navEl) {
+    var navLinks = Array.prototype.slice.call(navEl.querySelectorAll(".nav-link[href^='#']"));
+    var sections = navLinks
+      .map(function (link) {
+        return { link: link, el: document.getElementById(link.getAttribute("href").slice(1)) };
+      })
+      .filter(function (pair) { return pair.el; });
+
+    var navTicking = false;
+
+    var onNavScroll = function () {
+      navEl.classList.toggle("is-scrolled", window.scrollY > 8);
+
+      if (sections.length) {
+        // the "current" section is the last one whose top has passed under the nav
+        var marker = window.scrollY + navEl.offsetHeight + 120;
+        var current = null;
+        sections.forEach(function (pair) {
+          if (pair.el.offsetTop <= marker) current = pair;
+        });
+        // once the page is at the very bottom, honour the final section
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 4) {
+          current = sections[sections.length - 1];
+        }
+        sections.forEach(function (pair) {
+          pair.link.classList.toggle("is-current", pair === current);
+        });
+      }
+      navTicking = false;
+    };
+
+    window.addEventListener("scroll", function () {
+      if (navTicking) return;
+      navTicking = true;
+      requestAnimationFrame(onNavScroll);
+    }, { passive: true });
+
+    onNavScroll();
+  }
+
+  /* ---------- Scroll reveal (with sibling stagger) ---------- */
+
+  var revealEls = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
+
+  // siblings in the same container enter together, so offset each one slightly
+  revealEls.forEach(function (el) {
+    var parent = el.parentElement;
+    if (!parent) return;
+    var seen = parent.getAttribute("data-reveal-count");
+    var idx = seen ? parseInt(seen, 10) : 0;
+    el.style.setProperty("--reveal-delay", Math.min(idx * 70, 280) + "ms");
+    parent.setAttribute("data-reveal-count", idx + 1);
+  });
+
   if ("IntersectionObserver" in window && revealEls.length) {
-    var observer = new IntersectionObserver(
+    var revealObserver = new IntersectionObserver(
       function (entries) {
         entries.forEach(function (entry) {
           if (entry.isIntersecting) {
             entry.target.classList.add("in-view");
-            observer.unobserve(entry.target);
+            revealObserver.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.12 }
+      // threshold 0 + a negative bottom margin fires just after an element's top
+      // edge rises into view, so tall cards never get stuck unrevealed
+      { threshold: 0, rootMargin: "0px 0px -10% 0px" }
     );
-    revealEls.forEach(function (el) { observer.observe(el); });
+    revealEls.forEach(function (el) { revealObserver.observe(el); });
   } else {
     revealEls.forEach(function (el) { el.classList.add("in-view"); });
+  }
+
+  /* ---------- Spotlight cycle on the "How I Help" cards ----------
+     A soft navy highlight fades in on one card, holds, fades out, and
+     moves on. Order is set per card via data-spotlight-order so it runs
+     middle → right → left across each row. Pauses when the section is
+     off-screen, when the tab is hidden, and while a pointer is inside
+     the grid (so hover always wins).                               */
+
+  var spotGroup = document.querySelector("[data-spotlight-group]");
+
+  if (spotGroup && !reduceMotion.matches) {
+    var spotCards = Array.prototype.slice
+      .call(spotGroup.querySelectorAll("[data-spotlight-order]"))
+      .sort(function (a, b) {
+        return a.getAttribute("data-spotlight-order") - b.getAttribute("data-spotlight-order");
+      });
+
+    var HOLD_MS = 2000;  // class on: 0.8s fade-in, then it sits lit
+    var GAP_MS = 900;    // class off: 0.8s fade-out, then the next card
+    var spotIdx = 0;
+    var spotTimer = null;
+    var spotRunning = false;
+    var spotVisible = false;
+    var spotHovered = false;
+
+    var spotOn, spotOff;
+
+    spotOn = function () {
+      if (!spotRunning) return;
+      spotCards[spotIdx].classList.add("is-spotlit");
+      spotTimer = setTimeout(spotOff, HOLD_MS);
+    };
+
+    spotOff = function () {
+      spotCards[spotIdx].classList.remove("is-spotlit");
+      spotIdx = (spotIdx + 1) % spotCards.length;
+      if (!spotRunning) return;
+      spotTimer = setTimeout(spotOn, GAP_MS);
+    };
+
+    var spotStart = function () {
+      if (spotRunning || !spotVisible || spotHovered || document.hidden) return;
+      spotRunning = true;
+      spotTimer = setTimeout(spotOn, 350);
+    };
+
+    var spotStop = function () {
+      spotRunning = false;
+      clearTimeout(spotTimer);
+      spotCards.forEach(function (card) { card.classList.remove("is-spotlit"); });
+    };
+
+    if (spotCards.length && "IntersectionObserver" in window) {
+      new IntersectionObserver(
+        function (entries) {
+          spotVisible = entries[0].isIntersecting;
+          if (spotVisible) spotStart();
+          else spotStop();
+        },
+        { threshold: 0.2 }
+      ).observe(spotGroup);
+    } else if (spotCards.length) {
+      spotVisible = true;
+      spotStart();
+    }
+
+    spotGroup.addEventListener("pointerenter", function () {
+      spotHovered = true;
+      spotStop();
+    });
+
+    spotGroup.addEventListener("pointerleave", function () {
+      spotHovered = false;
+      spotStart();
+    });
+
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) spotStop();
+      else spotStart();
+    });
+  }
+
+  /* ---------- Canvas helpers ---------- */
+
+  // caps DPR at 2: a 3x phone gains nothing visible and pays for every pixel
+  function sizeCanvas(canvas, ctx) {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var rect = canvas.getBoundingClientRect();
+    var w = Math.max(1, Math.round(rect.width));
+    var h = Math.max(1, Math.round(rect.height));
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { w: w, h: h };
+  }
+
+  function onResize(handler) {
+    var t = null;
+    window.addEventListener("resize", function () {
+      clearTimeout(t);
+      t = setTimeout(handler, 140);
+    });
+  }
+
+  /* ---------- Interactive hero dot field ----------
+     Same 26px grid the CSS draws, but each dot warms from pale blue to
+     navy and swells as the cursor passes. The render loop only runs
+     while something is actually moving.                            */
+
+  var dotCanvas = document.querySelector("[data-dot-field]");
+  var heroEl = dotCanvas && dotCanvas.closest(".hero");
+
+  if (dotCanvas && heroEl && dotCanvas.getContext && !reduceMotion.matches) {
+    var dctx = dotCanvas.getContext("2d");
+    var SPACING = 26;
+    var RADIUS = 132;           // cursor influence radius
+    var BASE = [207, 224, 245]; // --dot-blue
+    var LIT = [8, 53, 125];     // --navy
+    var dots = [];
+    var dotSize = { w: 0, h: 0 };
+    var px = -9999, py = -9999, pointerIn = false;
+    var dotsRaf = null;
+
+    var buildDots = function () {
+      var size = sizeCanvas(dotCanvas, dctx);
+      dotSize = size;
+      dots = [];
+      for (var y = SPACING / 2; y < size.h + SPACING; y += SPACING) {
+        for (var x = SPACING / 2; x < size.w + SPACING; x += SPACING) {
+          dots.push({ x: x, y: y, lit: 0 });
+        }
+      }
+      return size;
+    };
+
+    var drawDots = function () {
+      dctx.clearRect(0, 0, dotSize.w, dotSize.h);
+      var moving = false;
+      for (var i = 0; i < dots.length; i++) {
+        var d = dots[i];
+        var target = 0;
+        if (pointerIn) {
+          var dx = d.x - px;
+          var dy = d.y - py;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < RADIUS) {
+            var f = 1 - dist / RADIUS;
+            target = f * f; // eased falloff reads softer than a linear cone
+          }
+        }
+        d.lit += (target - d.lit) * 0.14;
+        if (Math.abs(target - d.lit) > 0.002) moving = true;
+
+        var t = d.lit;
+        var r = Math.round(BASE[0] + (LIT[0] - BASE[0]) * t);
+        var g = Math.round(BASE[1] + (LIT[1] - BASE[1]) * t);
+        var b = Math.round(BASE[2] + (LIT[2] - BASE[2]) * t);
+        dctx.beginPath();
+        dctx.arc(d.x, d.y, 1.5 + t * 2.1, 0, Math.PI * 2);
+        dctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
+        dctx.fill();
+      }
+      return moving;
+    };
+
+    var tickDots = function () {
+      // a settled field stops drawing entirely; pointermove wakes it again
+      if (drawDots()) {
+        dotsRaf = requestAnimationFrame(tickDots);
+      } else {
+        dotsRaf = null;
+      }
+    };
+
+    var wakeDots = function () {
+      if (dotsRaf === null) dotsRaf = requestAnimationFrame(tickDots);
+    };
+
+    heroEl.addEventListener("pointermove", function (e) {
+      // a real mouse or trackpad only — a finger already covers what it touches
+      if (e.pointerType === "touch") return;
+      var rect = heroEl.getBoundingClientRect();
+      px = e.clientX - rect.left;
+      py = e.clientY - rect.top;
+      pointerIn = true;
+      wakeDots();
+    });
+
+    heroEl.addEventListener("pointerleave", function () {
+      pointerIn = false;
+      wakeDots(); // one last pass so the lit dots cool back down
+    });
+
+    buildDots();
+    drawDots();
+    heroEl.classList.add("dots-live");
+
+    onResize(function () {
+      buildDots();
+      drawDots();
+    });
+  }
+
+  /* ---------- Dot globe ----------
+     A sphere of points that turns on its own and leans toward the
+     cursor. Only renders while the closing section is on screen.  */
+
+  var globeCanvas = document.querySelector("[data-dot-globe]");
+
+  if (globeCanvas && globeCanvas.getContext) {
+    var gctx = globeCanvas.getContext("2d");
+    var gSize = sizeCanvas(globeCanvas, gctx);
+    var points = [];
+
+    var buildSphere = function () {
+      var count = gSize.w < 520 ? 420 : 720;
+      points = [];
+      var golden = Math.PI * (3 - Math.sqrt(5)); // golden angle → even spacing
+      for (var i = 0; i < count; i++) {
+        var y = 1 - (i / (count - 1)) * 2;
+        var ring = Math.sqrt(Math.max(0, 1 - y * y));
+        var theta = golden * i;
+        points.push({ x: Math.cos(theta) * ring, y: y, z: Math.sin(theta) * ring });
+      }
+    };
+
+    var spin = 0;
+    var tiltX = -0.32, tiltY = 0;
+    var targetX = -0.32, targetY = 0;
+
+    var drawGlobe = function () {
+      var w = gSize.w, h = gSize.h;
+      gctx.clearRect(0, 0, w, h);
+
+      var cx = w / 2, cy = h / 2;
+      var radius = Math.min(w, h) * 0.38;
+      var depth = 2.6; // perspective distance
+
+      var sinY = Math.sin(spin + tiltY), cosY = Math.cos(spin + tiltY);
+      var sinX = Math.sin(tiltX), cosX = Math.cos(tiltX);
+
+      for (var i = 0; i < points.length; i++) {
+        var p = points[i];
+        // rotate around Y, then around X
+        var x1 = p.x * cosY - p.z * sinY;
+        var z1 = p.x * sinY + p.z * cosY;
+        var y2 = p.y * cosX - z1 * sinX;
+        var z2 = p.y * sinX + z1 * cosX;
+
+        var scale = depth / (depth - z2);
+        var sx = cx + x1 * radius * scale;
+        var sy = cy + y2 * radius * scale;
+
+        var front = (z2 + 1) / 2;             // 0 = far side, 1 = nearest
+        var alpha = 0.10 + front * front * 0.58;
+        gctx.beginPath();
+        gctx.arc(sx, sy, 0.7 + front * 1.7, 0, Math.PI * 2);
+        gctx.fillStyle = "rgba(8, 53, 125, " + alpha.toFixed(3) + ")";
+        gctx.fill();
+      }
+    };
+
+    buildSphere();
+    drawGlobe();
+    globeCanvas.classList.add("is-live");
+
+    if (!reduceMotion.matches) {
+      var globeRaf = null;
+      var globeVisible = false;
+
+      var tickGlobe = function () {
+        spin += 0.0016;
+        tiltX += (targetX - tiltX) * 0.045;
+        tiltY += (targetY - tiltY) * 0.045;
+        drawGlobe();
+        globeRaf = requestAnimationFrame(tickGlobe);
+      };
+
+      var startGlobe = function () {
+        if (globeRaf === null && globeVisible && !document.hidden) {
+          globeRaf = requestAnimationFrame(tickGlobe);
+        }
+      };
+
+      var stopGlobe = function () {
+        if (globeRaf !== null) {
+          cancelAnimationFrame(globeRaf);
+          globeRaf = null;
+        }
+      };
+
+      // pointer anywhere on the page steers it, so the globe feels attached
+      // to you before you have even scrolled down to it
+      window.addEventListener("pointermove", function (e) {
+        if (e.pointerType === "touch") return;
+        var nx = e.clientX / window.innerWidth - 0.5;
+        var ny = e.clientY / window.innerHeight - 0.5;
+        targetY = nx * 1.1;
+        targetX = -0.32 + ny * 0.7;
+      }, { passive: true });
+
+      if ("IntersectionObserver" in window) {
+        new IntersectionObserver(
+          function (entries) {
+            globeVisible = entries[0].isIntersecting;
+            if (globeVisible) startGlobe();
+            else stopGlobe();
+          },
+          { threshold: 0 }
+        ).observe(globeCanvas.parentElement || globeCanvas);
+      } else {
+        globeVisible = true;
+        startGlobe();
+      }
+
+      document.addEventListener("visibilitychange", function () {
+        if (document.hidden) stopGlobe();
+        else startGlobe();
+      });
+    }
+
+    onResize(function () {
+      gSize = sizeCanvas(globeCanvas, gctx);
+      buildSphere();
+      drawGlobe();
+    });
   }
 })();

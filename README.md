@@ -4,13 +4,23 @@ Static marketing site for filofyai.com. No build step, no dependencies — plain
 
 ## Files
 
-- `index.html` — main landing page (hero, who we help, process, testimonials, founder)
+- `index.html` — main landing page (hero + proof band, tool marquee, How I Help, For Business, process, testimonials, founder, closing CTA)
 - `privacy.html` / `terms.html` — legal pages
 - `styles.css` — all styling
-- `script.js` — contact modal (injected on every page), form submission, scroll animations
+- `script.js` — contact modal (injected on every page), form submission, mobile nav, scroll reveals, the How-I-Help highlight cycle, and both dot canvases
 - `vercel.json` — enables clean URLs (`/privacy`, `/terms`) when deployed on Vercel
 - `assets/` — images (`luigi.jpg` founder photo)
 - `assets/logos/` — brand logos for the scrolling tool marquee below the hero (sourced from Simple Icons CDN, Wikimedia Commons, and vendor favicons). Pure-CSS infinite scroll: the track holds two identical logo sets and slides left by 50%; pauses on hover; becomes a static wrapped row under `prefers-reduced-motion`. To add/remove a tool, edit **both** `.marquee-set` blocks in `index.html` (they must stay identical) and adjust `animation-duration` in `styles.css` (~3.5s per logo feels right).
+
+## Motion
+
+Everything animated respects `prefers-reduced-motion` — under it the marquee becomes a static wrapped row, reveals show instantly, the highlight cycle is off, and both canvases fall back to a static frame.
+
+- **Highlight cycle** (`How I Help`): one card at a time gets a soft navy bloom that fades in, holds ~1.3s, and fades out. Order comes from `data-spotlight-order` on each card, currently `middle → right → left` across the top row, then the same across the bottom. Renumber those attributes to change the path. It pauses when the section scrolls off, when the tab is hidden, and while the pointer is inside the grid so hover always wins.
+- **Hero dots**: `script.js` replaces the CSS dot pattern with a canvas (`.hero.dots-live`) whose dots warm toward navy and swell near the cursor. The render loop stops as soon as the field settles and wakes on pointer movement.
+- **Dot globe** (closing CTA): a Fibonacci sphere of points that spins slowly and leans toward the cursor anywhere on the page. Only renders while the section is on screen.
+
+To slow or speed the highlight, edit `HOLD_MS` / `GAP_MS` in `script.js`. Navs that should collapse into a hamburger need the `nav-collapsible` class — the legal pages deliberately omit it so their single button stays inline.
 
 ## Before going live — 3 things
 
